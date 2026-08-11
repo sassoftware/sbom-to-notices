@@ -36,27 +36,30 @@ def get_component_licenses(components, override):
     # Load the override file into three data structures depending on the action.
     if override:
         for l in open(override).readlines():
-            a,b,c,d = l.strip().split(',', 3)
-            if b == 'hide':
-                exclusions.append(a)
-            elif b == 'add':
-                additions[a] = (b,c,d.strip('"'))
+            purl,action,newname,license,notes = l.strip().split(',', 4)
+            if action == 'hide':
+                exclusions.append(purl)
+            elif action == 'add':
+                additions[purl] = (action,newname,license,notes.strip('"'))
             else:
-                overrides[a] = (b,c,d.strip('"'))
+                overrides[purl] = (action,newname,license,notes.strip('"'))
 
     # Iterate over all components in sbom.
     for component in components:
         name = component['name']
+        newname = name
         version = component['version']
         license = "Missing"
         extra = ""
         if name in overrides:
-            license = overrides[name][1]
-            extra = overrides[name][2]
+            newname = overrides[name][1]
+            license = overrides[name][2]
+            extra = overrides[name][3]
         elif name in additions:
-            license = additions[name][1]
-            extra = additions[name][2]
-            additions[name] = "done",additions[name][1], additions[name][2] #mark addition as replaced
+            newname = additions[name][1]
+            license = additions[name][2]
+            extra = additions[name][3]
+            additions[name] = "done",additions[name][1], additions[name][2], additions[name][3] #mark addition as replaced
         elif "licenses" in component and component['licenses']:
             license = ""
             if "expression" in component['licenses'][0]:
@@ -70,12 +73,12 @@ def get_component_licenses(components, override):
                         license += sublicense['license']['name']
                 license = license[5:]
 
-        results[(name, version)] = license, extra
+        results[(newname, version)] = license, extra
     
     # For any 'add' items that didn't show up, add them now.
     for component in additions:
         if additions[component][0] != 'done':
-           results[(component,None)] = additions[component][1], additions[component][2]
+           results[(additions[component][1],None)] = additions[component][2], additions[component][3]
 
     return results
 

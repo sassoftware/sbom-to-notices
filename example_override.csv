@@ -1,3 +1,4 @@
-FastInfoset,add,custom-example,Showing additional information.
-example,add,custom-example,"Showing, additional information."
-activation,hide,hide,"Showing additional, information."
+FastInfoset,add,FastInfoset,custom-example,"Showing additional information."
+example,add,example2,custom-example,"Look, the real name is the second one."
+activation,hide,hide,hide,"When hiding, the other fields don't matter."
+filters,replace,filets,Apache-2.0,"Renamed Filters."

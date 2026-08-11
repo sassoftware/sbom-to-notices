@@ -18,10 +18,10 @@ you can add specific commercial licenses for dependencies that wouldn't normally
 ### Overrides
 
 If you have a ground truth you need to use to correct issues or augment information in SBOMs caused by the limitations
-of scanning software, you can develop an override file to manually specify licenses for specific purls. There should
+of scanning software, you can develop an override file to manually specify licenses for specific components. There should
 be one entry per line, formatted as follows.
 
-    purl,add/replace/hide,identifier,"additional copyright information"
+    original-name,add/replace/hide,rename,license-identifier,"additional copyright information"
 
 You can create your own identifiers to match custom files created in `custom-license-data`.
 
